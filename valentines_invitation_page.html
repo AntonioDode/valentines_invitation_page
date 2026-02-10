@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DO NOT PRESS</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pacifico', cursive; }
+
+    body {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ffd6e7, #ffffff);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bg-img {
+      position: absolute;
+      width: 260px;
+      opacity: 1;
+      filter: blur(0px);
+      pointer-events: none;
+      animation: floatMotion 8s ease-in-out infinite alternate;
+      transform-origin: center;
+      transition: transform 0.3s ease-out;
+    }
+
+    .bg-left-bottom { left: 60px; bottom: 60px; }
+    .bg-right-top { right: 60px; top: 60px; }
+    .bg-left-top { left: 60px; top: 60px; }
+    .bg-right-bottom { right: 60px; bottom: 60px; }
+
+    @keyframes floatMotion {
+      0% { transform: rotate(-3deg) scale(1); }
+      50% { transform: rotate(3deg) scale(1.05); }
+      100% { transform: rotate(-3deg) scale(1); }
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: rgba(255,0,128,0.35);
+      clip-path: polygon(50% 0%, 61% 14%, 75% 14%, 85% 25%, 90% 38%, 80% 50%, 50% 100%, 20% 50%, 10% 38%, 15% 25%, 25% 14%, 39% 14%);
+      animation: fall linear infinite;
+      top: -30px;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0.35; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0.35; }
+    }
+
+    .container {
+      text-align: center;
+      padding: 50px 60px;
+      background: rgba(255,255,255,0.75);
+      border-radius: 28px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+      max-width: 520px;
+      width: 90%;
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 { font-size: 2.2rem; margin-bottom: 40px; font-weight: bold; line-height: 1.35; }
+
+    .buttons { position: relative; height: 140px; }
+
+    button {
+      font-size: 1.25rem;
+      padding: 14px 34px;
+      border-radius: 40px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: absolute;
+    }
+
+    #yesBtn { background: #ff4da6; color: white; left: 50%; transform: translateX(-50%); box-shadow: 0 6px 18px rgba(255, 0, 120, 0.45); }
+    #yesBtn::after { content: " ❤️"; }
+
+    #noBtn { background: black; color: white; left: 20%; top: 50%; transform: translateY(-50%); }
+
+    .invite {
+      display: none;
+      font-size: 1.6rem;
+      color: #ff2e88;
+      padding: 22px 28px;
+      background: #fff5e6;
+      border: 3px solid #e0b97f;
+      border-radius: 16px;
+      box-shadow: inset 0 0 12px rgba(0,0,0,0.15);
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+    }
+
+    .message { font-size: 1.5rem; color: #ff2e88; margin-top: 22px; display: none; }
+
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: red;
+      opacity: 0.9;
+      pointer-events: none;
+      z-index: 5;
+      border-radius: 3px;
+      animation: confetti-fall 2s linear forwards;
+    }
+
+    @keyframes confetti-fall {
+      0% { transform: translate(0,0) rotate(0deg); opacity: 1; }
+      100% { transform: translate(var(--x), 500px) rotate(360deg); opacity: 0; }
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 40px 24px; }
+      h1 { font-size: 1.5rem; }
+      .bg-img { width: 160px; opacity: 0.18; }
+      .buttons { height: 120px; }
+      button { font-size: 1.05rem; padding: 12px 24px; }
+      .invite { font-size: 1.2rem; }
+      .message { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <img src="photo1.jpg" class="bg-img bg-left-bottom" />
+  <img src="photo2.jpg" class="bg-img bg-right-top" />
+  <img src="photo3.jpg" class="bg-img bg-left-top" />
+  <img src="photo4.jpg" class="bg-img bg-right-bottom" />
+
+  <div id="hearts"></div>
+  <div class="container">
+    <h1><b>Vrei sa fii partenera mea de Valentine's Day anul asta?</b></h1>
+
+    <div class="buttons">
+      <button id="yesBtn">DAAA</button>
+      <button id="noBtn">NU</button>
+      <div class="invite" id="inviteMsg">INVITATIE ACCEPTATA</div>
+    </div>
+
+    <div class="message" id="loveMsg">Stiam eu 💖 Te iubesc extrem de mult iubita mea 💗💗💗</div>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const msg = document.getElementById("loveMsg");
+    const invite = document.getElementById("inviteMsg");
+    const heartsContainer = document.getElementById('hearts');
+    const bgImages = document.querySelectorAll('.bg-img');
+
+    function moveNoButton() {
+      const x = Math.random() * 70 + 10;
+      const y = Math.random() * 60 + 10;
+      noBtn.style.left = x + "%";
+      noBtn.style.top = y + "%";
+      let scale = parseFloat(yesBtn.dataset.scale || 1);
+      scale += 0.08;
+      yesBtn.dataset.scale = scale;
+      yesBtn.style.transform = `translateX(-50%) scale(${scale})`;
+      if (scale > 1.7) noBtn.style.display = "none";
+    }
+
+    noBtn.addEventListener("mouseover", moveNoButton);
+    noBtn.addEventListener("touchstart", moveNoButton);
+
+    function createConfetti() {
+      const colors = ['#ff4da6','#ffdf4d','#4dffdb','#4d7eff','#ff4de8'];
+      for(let i=0;i<50;i++){
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+        confetti.style.left = Math.random()*100 + 'vw';
+        confetti.style.setProperty('--x', (Math.random()*200 - 100) + 'px');
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 2000);
+      }
+    }
+
+    yesBtn.addEventListener("click", () => {
+      document.querySelector('h1').style.display = 'none';
+      yesBtn.style.display = "none";
+      noBtn.style.display = "none";
+      invite.style.display = "block";
+      msg.style.display = "block";
+      createConfetti();
+      // Exploding effect for background images
+      bgImages.forEach(img => {
+        img.style.transition = 'transform 0.2s ease-out';
+        img.style.transform += ' scale(2)';
+        setTimeout(() => { img.style.transform = img.style.transform.replace(' scale(2)',''); }, 300);
+      });
+    });
+
+    // Generate constant falling hearts
+    const totalHearts = 40;
+    for(let i=0;i<totalHearts;i++){
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (5 + Math.random() * 5) + 's';
+      heart.style.animationDelay = (Math.random() * 5) + 's';
+      heart.style.width = (12 + Math.random() * 15) + 'px';
+      heart.style.height = heart.style.width;
+      heartsContainer.appendChild(heart);
+    }
+  </script>
+
+</body>
+</html>
