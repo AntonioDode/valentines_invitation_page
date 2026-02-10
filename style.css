@@ -124,7 +124,7 @@ button {
   .bg-left-bottom { bottom: 5px; left: 1px; }
   .bg-right-bottom { bottom: 6px; right: 40px; }
   .bg-left-top { top: 5px; left: 20px; }
-  .bg-right-top { top: 7px; right: 20px; }
+  .bg-right-top { top: 5px; right: 20px; }
   .buttons { height: 120px; }
   button { font-size: 1.05rem; padding: 12px 24px; }
   .invite { font-size: 1.2rem; }
